@@ -1,8 +1,8 @@
 @echo off
-title Text Line Changer — Builder
+title Text Line Changer v2.3 — Builder
 echo.
 echo ============================================
-echo   Text Line Changer — EXE Builder
+echo   Text Line Changer v2.3 — EXE Builder
 echo ============================================
 echo.
 
@@ -35,6 +35,7 @@ echo [3/4] EXE bouwen...
 pyinstaller --onefile --windowed ^
     --name "TextLineChanger" ^
     --icon="app.ico" ^
+    --add-data "app.ico;." ^
     --collect-data customtkinter ^
     text_line_changer.py
 

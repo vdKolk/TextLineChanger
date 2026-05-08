@@ -1,5 +1,5 @@
 """
-Text Line Changer v2.2
+Text Line Changer v2.3
 Vereisten: pip install customtkinter==5.2.2 pillow
 """
 
@@ -9,6 +9,8 @@ from tkinter import filedialog, messagebox
 import threading
 import time
 import os
+import sys
+import ctypes
 import json
 
 ctk.set_appearance_mode("dark")
@@ -38,10 +40,18 @@ def _set_icon(window):
     Zet het app-icoon en voorkom dat CustomTkinter het overschrijft.
     CustomTkinter slaat zijn eigen icoon over als _iconbitmap_method_called=True.
     """
-    ico_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "app.ico")
+    if hasattr(sys, '_MEIPASS'):
+        # Pad wanneer het als EXE draait
+        ico_path = os.path.join(sys._MEIPASS, "app.ico")
+    else:
+        # Pad tijdens development
+        ico_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "app.ico")
+
     if not os.path.exists(ico_path):
         return
     try:
+        # Zorg dat Windows de taakbalk-icoon correct koppelt
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("ruben.textlinechanger.2.3")
         # Zet de vlag VOOR iconbitmap — dan pikt CustomTkinter het op als "al ingesteld"
         window._iconbitmap_method_called = True
         window.iconbitmap(default=ico_path)
@@ -184,7 +194,7 @@ class App(ctk.CTk):
 
     # ── UI bouwen ─────────────────────────────────────────────────────────────
     def _build_ui(self):
-        self.title("Text Line Changer v2.2")
+        self.title("Text Line Changer v2.3")
         fs = self._fs()
 
         self._body = ctk.CTkFrame(self, fg_color=BG, corner_radius=0)
